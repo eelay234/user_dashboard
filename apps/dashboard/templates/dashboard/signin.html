@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <title>Signin Page</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   {% load staticfiles %}
+   <link rel="stylesheet" href="{% static 'dashboard/css/styles.css' %}">
+</head>
+<body>
+
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Test App</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">Home</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/login">Sign in</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+    {% if messages %}
+        <div class="show_errors">
+            <ul>
+            {% for msg in messages %}
+                    <li>{{msg.message}}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <div class="hero-unit">
+      <form action="login" method="post">
+          {% csrf_token %}
+          <h1>Sign In</h1>
+          <label for="email">Email Address:</label><br>
+          <input type="text" name="email" id="email"><br>
+          <label for="password">Password:</label><br>
+          <input type="password" name="password" id="password"><br>
+          <input type="submit" class="btn btn-sm btn-success" valuer="Sign in">
+      </form>
+    </div>
+    <a href="/register">Don't have an account? Register</a>
+  </div>
+</body>
+</html>

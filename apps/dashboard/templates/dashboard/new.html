@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <title>Add New Page</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   {% load staticfiles %}
+   <link rel="stylesheet" href="{% static 'dashboard/css/styles.css' %}">
+</head>
+<body>
+
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Test App</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">Home</a></li>
+        <li><a href="/show_dashboard">Dashboard</a></li>
+        <li><a href="/users/show/">Profile</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/logoff">Log off</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+    {% if messages %}
+        <div class="show_errors">
+            <ul>
+            {% for msg in messages %}
+                    <li>{{msg.message}}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <div class="hero-unit">
+      <h1>Add a new user</h1>
+      <form action="/show_dashboard" method="post">
+        {% csrf_token %}
+        <input type="submit" name="backtodash" value="Return to Dashboard">
+      </form>
+      <form action="/registration" method="post">
+          {% csrf_token %}
+          <label for="email">Email Address:</label><br>
+          <input type="text" name="email" id="email"><br>
+          <label for="first_name">First Name:</label><br>
+          <input type="text" name="first_name" id="first_name"><br>
+          <label for="last_name">Last Name:</label><br>
+          <input type="text" name="last_name" idf="last_name"><br>
+          <label for="password">Password:</label><br>
+          <input type="password" name="password" id="password"><br>
+          <label for="password_confirm">Password Confirmation:</label><br>
+          <input type="password" name="password_confirm" id="password_confirm"><br>
+          <input type="submit" class="btn btn-sm btn-success" valuer="create">
+      </form>
+    </div>
+    </div>
+</body>
+</html>

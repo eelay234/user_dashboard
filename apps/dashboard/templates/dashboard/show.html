@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <title>Show Page</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   {% load staticfiles %}
+   <link rel="stylesheet" href="{% static 'dashboard/css/styles.css' %}">
+</head>
+<body>
+
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Test App</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">Home</a></li>
+        <li><a href="/show_dashboard">Dashboard</a></li>
+        <li><a href="/users/edit">Profile</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/logoff">Log off</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+    {% if messages %}
+        <div class="show_errors">
+            <ul>
+            {% for msg in messages %}
+                    <li>{{msg.message}}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <div class="hero-unit">
+      {{ msg_user.first_name}} {{ msg_user.last_name }}
+      <p>Registered at: {{ msg_user.created_at }}</p>
+      <p>User id: {{ msg_user.id }}</p>
+      <p>Email address: {{ msg_user.email }}</p>
+      <p>Description: {{ msg_user.description }}</p>
+      <form action="/users/post/{{ msg_user.id }}" method="post">
+          {% csrf_token %}
+          <h4>Leave a message for {{ msg_user.first_name }}</h4>
+          <input type="text" name="message"><br>
+          <input type="submit" class="btn btn-sm btn-success" value="Post">
+      </form>
+      {%  for post in posts %}
+        <div class="show_info">
+          <p>{{ post.author_id.first_name }} {{ post.author_id.last_name }} wrote<p>
+          <p> {{ post.created_at }}</p>
+          <p>{{ post.message }}</p>
+          {% for comment in post.cset %}
+          <div class="show_comment">
+            Comments:
+            <p>{{ comment.author_id.first_name }} {{ comment.author_id.last_name }} wrote<p>
+            <p> {{ comment.created_at }}</p>
+            <p class="box">{{ comment.message }}</p>
+            </div>
+          {% endfor %}
+          <form action="/users/post_comment/{{ post.id }}/{{ msg_user.id}}" method="post" class="comment_post">
+              {% csrf_token %}
+              <div class="show_comment">
+              <input type="text" name="message"><br>
+              <input type="submit" class="btn btn-sm btn-success" value="Post">
+            </div>
+          </form>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>

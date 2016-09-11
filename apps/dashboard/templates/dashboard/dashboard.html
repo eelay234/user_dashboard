@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <title>User Dashboard</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   {% load staticfiles %}
+   <link rel="stylesheet" href="{% static 'dashboard/css/styles.css' %}">
+</head>
+<body>
+
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Test App</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">Home</a></li>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="/users/edit">Profile</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/logoff">Log Off</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="hero-unit">
+      {% if request.session.user_level == 9 %}
+        <h2>Manage Users</h2>
+        <form action="/users/new" method="post">
+          {% csrf_token %}
+          <input type="submit" name="add_user" value="Add New">
+        </form>
+      {% endif %}
+      <table>
+        <tr>
+          <th class="t_id">ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Created on</th>
+          <th>User Level</th>
+          {% if request.session.user_level == 9 %}
+          <th>Actions</th>
+          {% endif %}
+        </tr>
+        {% for user in users%}
+        <tr>
+          <td class="t_id">{{ user.id }}</td>
+          <td><a href="/users/show/{{user.id }}">{{ user.first_name }}   {{ user.last_name }}</a></td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.created_at }}</td>
+          {% if user.user_level == 9 %}
+            <td>Admin</td>
+          {% else %}
+            <td>Normal</td>
+          {% endif %}
+          {% if request.session.user_level == 9 %}
+          <td>
+            <a href="/users/admin/edit/{{user.id }}">edit</a>
+            <a href="/users/admin/remove/{{user.id }}" onclick="return confirm('Are you sure you want to Remove?');">remove</a>
+          </td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</body>
+</html>
